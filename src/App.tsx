@@ -4,7 +4,7 @@ import { RoutesProvider } from './core/routes'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <RoutesProvider />
     </BrowserRouter>
   )
