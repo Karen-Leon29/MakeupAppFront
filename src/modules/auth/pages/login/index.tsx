@@ -9,10 +9,12 @@ import { PrimaryInput } from 'core/components/input/primaryInput'
 import { CheckboxComponent } from 'core/components/checkbox'
 import { PrimaryButton } from 'core/components/button/primaryButton'
 import { LineButton } from 'core/components/button/lineButton'
+import { useNavigate } from 'react-router-dom'
 
 export const LoginPage: React.FC = () => {
   const translations = useLittera(MakeupString)
   const classes = useStyles
+  const navigate = useNavigate()
   const [transition, setTransition] = useState(false)
 
   return (
@@ -23,7 +25,7 @@ export const LoginPage: React.FC = () => {
         <PrimaryInput type="password" label={translations.password} />
         <CheckboxComponent label={translations.rememberMe} />
         <Box sx={classes.forgotPassword}>
-          <PrimaryButton>{translations.login}</PrimaryButton>
+          <PrimaryButton onClick={() => navigate('/homepage')}>{translations.login}</PrimaryButton>
           <LineButton setTransition={setTransition} route={'/register'}>
             {translations.createAccount}
           </LineButton>
