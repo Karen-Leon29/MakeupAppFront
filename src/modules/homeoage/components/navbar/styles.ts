@@ -4,6 +4,7 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
     return {
         appBar: {
             bgcolor: 'white',
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
         },
         toolbar: {
             display: 'flex',

@@ -8,11 +8,14 @@ import {
   CardContent,
   CardActions,
 } from '@mui/material'
-import { ArrowForward as ArrowForwardIcon } from '@mui/icons-material'
+import { ArrowForward as ArrowForwardIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import { useStyles } from './styles'
+import { FilterCategory } from '../filter'
+import { useState } from 'react'
 
 export const BodyComponent = () => {
   const classes = useStyles
+  const [openFilter, setOpenFilter] = useState<boolean>(false)
   const products = [
     {
       title: 'Colección de Labiales',
@@ -36,33 +39,53 @@ export const BodyComponent = () => {
     },
   ]
 
+  const toggleFilter = () => {
+    setOpenFilter((prev) => !prev)
+  }
+
   return (
-    <Box sx={classes.bodyContainer}>
-      {products.map((product, index) => (
-        <Card key={index} sx={classes.card}>
-          <Box sx={classes.imageContainer}>
-            <img src={product.img} alt={product.title} style={{ width: '100%', height: 'auto' }} />
-          </Box>
-          <CardContent>
-            <Typography variant="h5" sx={classes.cardTitle}>
-              {product.title}
-            </Typography>
-            <Typography variant="body2" sx={classes.cardDescription}>
-              {product.description}
-            </Typography>
-          </CardContent>
-          <CardActions sx={classes.cardActions}>
-            <Button sx={classes.cardButton}>Buy Now</Button>
-            <IconButton sx={classes.arrowButton}>
-              <ArrowForwardIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      ))}
-      <Paper elevation={3} sx={classes.decorativePaper}>
-        <Typography variant="h4">Special Offers</Typography>
-        <Typography variant="body2">Check out our latest deals on Makeup products!</Typography>
-      </Paper>
+    <Box sx= {{minWidth: '100%'}}>
+      <Box sx={classes.filter}>
+        <FilterCategory open={openFilter} onClose={() => setOpenFilter(false)} />
+        {!openFilter && (
+          <IconButton sx={classes.filterButton} onClick={toggleFilter}>
+            <ArrowBackIcon />
+          </IconButton>
+        )}
+      </Box>
+      <Box sx={classes.bodyContainer}>
+        {products.map((product) => (
+          <Card key={product.title} sx={classes.card}>
+            <Box sx={classes.imageContainer}>
+              <img
+                src={product.img}
+                alt={product.title}
+                style={{ width: '100%', height: 'auto' }}
+              />
+            </Box>
+            <CardContent>
+              <Typography variant="h5" sx={classes.cardTitle}>
+                {product.title}
+              </Typography>
+              <Typography variant="body2" sx={classes.cardDescription}>
+                {product.description}
+              </Typography>
+            </CardContent>
+            <CardActions sx={classes.cardActions}>
+              <Button sx={classes.cardButton}>Buy Now</Button>
+              <IconButton sx={classes.arrowButton}>
+                <ArrowForwardIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+        ))}
+      </Box>
+      <Box sx={classes.bodyContainer}>
+        <Paper elevation={3} sx={classes.decorativePaper}>
+          <Typography variant="h4">Special Offers</Typography>
+          <Typography variant="body2">Check out our latest deals on Makeup products!</Typography>
+        </Paper>
+      </Box>
     </Box>
   )
 }
