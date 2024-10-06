@@ -23,7 +23,7 @@ export const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     const user = await getUserById('1')
     console.log(user)
-    if (user.data) {
+    if (user.error) {
       navigate('/homepage')
     } else {
       setAlert({ message: 'El correo ingresado no se encuentra registrado', severity: 'error' })

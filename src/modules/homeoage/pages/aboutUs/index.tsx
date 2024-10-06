@@ -26,7 +26,7 @@ export const AboutUs: React.FC = () => {
 
         <Section>
           <SectionText variant="h5">
-            Bienvenido a <Highlight>MakeUpDoty</Highlight>, tu destino definitivo para todo lo
+            Bienvenido a <Highlight>MakeUpDory</Highlight>, tu destino definitivo para todo lo
             relacionado con belleza y maquillaje. Descubre las últimas tendencias, consejos y
             secretos para lograr un look impecable.
           </SectionText>
@@ -71,17 +71,17 @@ export const AboutUs: React.FC = () => {
             style={hoverEffect}
           />
           <SectionText variant="h5">
-            <Highlight>¿Por qué Elegir MakeUpDoty?</Highlight> En MakeUpDoty, priorizamos la calidad
+            <Highlight>¿Por qué Elegir MakeUpDory?</Highlight> En MakeUpDory, priorizamos la calidad
             y la satisfacción del cliente. Nuestros productos están cuidadosamente elaborados para
             cumplir con los más altos estándares, asegurando que obtengas la mejor experiencia en
             cada aplicación.
-          </SectionText>
+          </SectionText>    
         </Section>
 
         <Box mt={4} textAlign="center">
           <Typography variant="h6" color="#6C4D94">
             ¡Únete a nuestra comunidad y experimenta la magia del maquillaje con{' '}
-            <Highlight>MakeUpDoty</Highlight>!
+            <Highlight>MakeUpDory</Highlight>!
           </Typography>
         </Box>
       </Container>
