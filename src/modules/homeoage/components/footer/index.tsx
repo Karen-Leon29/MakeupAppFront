@@ -28,7 +28,7 @@ export const FooterComponent: React.FC = () => {
 
       <Toolbar sx={classes.secondSection}>
         <Box sx={classes.contactContainer}>
-          <Typography sx={classes.contactTitle}>Makeup Doty</Typography>
+          <Typography sx={classes.contactTitle}>Makeup Dory</Typography>
           <Box sx={classes.contactInfo}>
             <List sx={classes.containerList}>
               <Typography sx={classes.contactText}>Sobre Nosotros</Typography>
@@ -60,7 +60,7 @@ export const FooterComponent: React.FC = () => {
             <IconButton sx={classes.iconContact}>
               <Email />
             </IconButton>
-            <Typography sx={classes.contactText}>correoDeMakeupDoty@mail.com</Typography>
+            <Typography sx={classes.contactText}>correoDeMakeupDory@mail.com</Typography>
           </Box>
           <Typography sx={classes.integralPrivacity}>Acá lo del Copy Rigth</Typography>
         </Box>
