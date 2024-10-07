@@ -12,8 +12,11 @@ import { ArrowForward as ArrowForwardIcon, ArrowBack as ArrowBackIcon } from '@m
 import { useStyles } from './styles'
 import { FilterCategory } from '../filter'
 import { useState } from 'react'
+import { useLittera } from '@assembless/react-littera'
+import { MakeupString } from 'core/strings'
 
 export const BodyComponent = () => {
+  const translations = useLittera(MakeupString)
   const classes = useStyles
   const [openFilter, setOpenFilter] = useState<boolean>(false)
   const products = [
@@ -70,9 +73,9 @@ export const BodyComponent = () => {
               <Typography variant="body2" sx={classes.cardDescription}>
                 {product.description}
               </Typography>
-            </CardContent>
+            </CardContent> 
             <CardActions sx={classes.cardActions}>
-              <Button sx={classes.cardButton}>Buy Now</Button>
+              <Button sx={classes.cardButton}>{translations.buyNow}</Button>
               <IconButton sx={classes.arrowButton}>
                 <ArrowForwardIcon />
               </IconButton>
@@ -82,8 +85,8 @@ export const BodyComponent = () => {
       </Box>
       <Box sx={classes.bodyContainer}>
         <Paper elevation={3} sx={classes.decorativePaper}>
-          <Typography variant="h4">Special Offers</Typography>
-          <Typography variant="body2">Check out our latest deals on Makeup products!</Typography>
+          <Typography variant="h4">{translations.specialOffers}</Typography>
+          <Typography variant="body2">{translations.checkProducts}</Typography>
         </Paper>
       </Box>
     </Box>

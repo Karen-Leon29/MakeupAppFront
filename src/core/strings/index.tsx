@@ -83,4 +83,16 @@ export const MakeupString = {
     es_ES: '¿Ya tienes una cuenta?',
     en_US: 'Already have an account?',
   },
+  specialOffers: {
+    es_ES: 'Ofertas especiales',
+    en_US: 'Special offers',
+  },
+  checkProducts: {
+    es_ES: '¡Echa un vistazo a nuestros productos!',
+    en_US: 'Check out our latest deals on Makeup products!',
+  },
+  buyNow: {
+    es_ES: 'Comprar ahora',
+    en_US: 'Buy now',
+  }
 }
