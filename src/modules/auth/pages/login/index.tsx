@@ -20,7 +20,7 @@ export const LoginPage: React.FC = () => {
   const [transition, setTransition] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [rememberMe, setRememberMe] = useState<boolean>(false) 
+  const [rememberMe, setRememberMe] = useState<boolean>(false)
   const { setAlert } = useContext(AppContext)
 
   const handleLogin = async () => {
@@ -51,43 +51,52 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     handleRememberMe()
-  }, []) 
+  }, [])
 
   return (
-    <LayoutLogin positionImg="left" transition={transition}>
-      <Box sx={classes.form}>
-        <TitleHeader title={translations.login} />
-        
-        <PrimaryInput
-          label={translations.user}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          min={3}
-        />
-        
-        <PrimaryInput
-          type="password"
-          label={translations.password}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        
-        <CheckboxComponent
-          label={translations.rememberMe}
-          checked={rememberMe}
-          onChange={(e) => setRememberMe(e.target.checked)}
-        />
-        
-        <Box sx={classes.forgotPassword}>
-          <PrimaryButton onClick={handleLogin}>{translations.login}</PrimaryButton>
-          <LineButton setTransition={setTransition} route={'/register'}>
-            {translations.createAccount}
-          </LineButton>
-          <LineButton setTransition={setTransition} route={'/recovery-password'}>
-            {translations.forgotPassword}
-          </LineButton>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleLogin()
+      }}
+    >
+      <LayoutLogin positionImg="left" transition={transition}>
+        <Box sx={classes.form}>
+          <TitleHeader title={translations.login} />
+
+          <PrimaryInput
+            label={translations.user}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            min={3}
+          />
+
+          <PrimaryInput
+            type="password"
+            label={translations.password}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <CheckboxComponent
+            label={translations.rememberMe}
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+
+          <Box sx={classes.forgotPassword}>
+            <PrimaryButton type="submit" onClick={handleLogin}>
+              {translations.login}
+            </PrimaryButton>
+            <LineButton setTransition={setTransition} route={'/register'}>
+              {translations.createAccount}
+            </LineButton>
+            <LineButton setTransition={setTransition} route={'/recovery-password'}>
+              {translations.forgotPassword}
+            </LineButton>
+          </Box>
         </Box>
-      </Box>
-    </LayoutLogin>
+      </LayoutLogin>
+    </form>
   )
 }

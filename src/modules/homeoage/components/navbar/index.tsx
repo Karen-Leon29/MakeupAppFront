@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -15,6 +15,8 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Chip,
+  Grid,
 } from '@mui/material'
 import {
   Search as SearchIcon,
@@ -24,13 +26,18 @@ import {
   ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material'
 import { useStyles } from './styles'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { CategoriesResponse, getCategories } from 'core/services'
+import logo from 'assets/pics/logo.png'
 
 export const NavbarComponent: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [openDialog, setOpenDialog] = useState(false) 
+  const [openDialog, setOpenDialog] = useState(false)
+  const [categories, setCategories] = useState<CategoriesResponse[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<CategoriesResponse[]>([]) // Nuevo estado
   const classes = useStyles
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -50,14 +57,37 @@ export const NavbarComponent: React.FC = () => {
 
   const handleLogout = () => {
     handleCloseDialog()
-    navigate('/') 
+    navigate('/')
   }
+
+  const handleCategories = async () => {
+    const { data: resp } = await getCategories()
+    if (resp) setCategories(resp)
+  }
+
+  const handleSelectCategory = (category: CategoriesResponse) => {
+    if(pathname !== '/homepage') navigate('/homepage')
+    if (!selectedCategories.find((c) => c.id === category.id)) {
+      setSelectedCategories((prev) => [...prev, category])
+    }
+    handleCloseMenu()
+  }
+
+  const handleDeleteCategory = (categoryId: number) => {
+    setSelectedCategories((prev) => prev.filter((category) => category.id !== categoryId))
+  }
+
+  useEffect(() => {
+    handleCategories()
+  }, [])
 
   return (
     <>
       <AppBar position="static" sx={classes.appBar}>
         <Toolbar sx={classes.toolbar}>
-          <Typography sx={classes.logo}>Logo</Typography>
+          <Typography sx={classes.logo}>
+            <img src={logo} alt="Logo" style={{ height: '60px', marginTop: '10px' }} />
+          </Typography>
           <Box sx={classes.linksContainer}>
             <Box onClick={() => navigate('/homepage')}>
               <Typography sx={classes.link}>Inicio</Typography>
@@ -76,18 +106,18 @@ export const NavbarComponent: React.FC = () => {
                 'aria-labelledby': 'categories-button',
               }}
             >
-              <MenuItem onClick={handleCloseMenu}>Belleza</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Perfumería</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Maquillaje</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Cuidado de la Piel</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Cuidado del Cabello</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Manicura</MenuItem>
-              <MenuItem onClick={handleCloseMenu}>Spa y Relajación</MenuItem>
+              {categories?.map((category) => (
+                <MenuItem key={category.id} onClick={() => handleSelectCategory(category)}>
+                  {category.nameCategory}
+                </MenuItem>
+              ))}
             </Menu>
             <Box onClick={() => navigate('/about-us')}>
               <Typography sx={classes.link}>Sobre Nosotros</Typography>
             </Box>
-            <Typography sx={classes.link}>Contáctanos</Typography>
+            <Box onClick={() => navigate('/contact-us')}>
+              <Typography sx={classes.link}>Contáctanos</Typography>
+            </Box>
           </Box>
           <Box display="flex" alignItems="center" gap={2}>
             <Box sx={classes.search}>
@@ -114,6 +144,23 @@ export const NavbarComponent: React.FC = () => {
           </Box>
         </Toolbar>
       </AppBar>
+
+      {selectedCategories.length > 0 && (
+        <Box sx={{ p: '15px 50px' }}>
+          <Typography sx={classes.categotySelect}>Categorías seleccionadas:</Typography>
+          <Grid container spacing={1}>
+            {selectedCategories.map((category) => (
+              <Grid item key={category.id}>
+                <Chip
+                  label={category.nameCategory}
+                  onDelete={() => handleDeleteCategory(category.id)}
+                  color="primary"
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Cerrar Sesión</DialogTitle>

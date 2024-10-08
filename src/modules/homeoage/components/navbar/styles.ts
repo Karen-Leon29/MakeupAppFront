@@ -1,6 +1,6 @@
 import { SxStyles } from "core/types/styles";
 
-export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer' | 'link' | 'search' | 'searchIconWrapper' | 'inputBase' | 'iconButton'> = (() => {
+export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer' | 'link' | 'search' | 'searchIconWrapper' | 'inputBase' | 'iconButton' | 'categotySelect'> = (() => {
     return {
         appBar: {
             bgcolor: 'white',
@@ -64,5 +64,13 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
             color: '#B682FA',
             bgcolor: '#B682FA33',
         },
-    };
+        categotySelect: {
+            display: 'flex',
+            flexDirection: 'column',
+            color: '#6C4D94',
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            pb: '5px',
+        },
+    };  
 })();

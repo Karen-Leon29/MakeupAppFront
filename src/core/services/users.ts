@@ -1,4 +1,4 @@
-import { Users } from "core/types/requests"
+import { Users, UsersRequest } from "core/types/requests"
 import { GET, POST } from "./requests"
 
 
@@ -12,8 +12,8 @@ export const getUserById = async (id: string) => {
     return response
 }
 
-export const createUser = async (data: Users) => {
-    const response = POST<Users>('/users', data)
+export const createUser = async (data: UsersRequest) => {
+    const response = POST<Users, UsersRequest>('/api-user/registerUser', data)
     return response
 }
 

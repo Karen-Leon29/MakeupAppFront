@@ -94,5 +94,29 @@ export const MakeupString = {
   buyNow: {
     es_ES: 'Comprar ahora',
     en_US: 'Buy now',
-  }
+  },
+  fieldsRequired: {
+    es_ES: 'Todos los campos son obligatorios',
+    en_US: 'All fields are required',
+  },
+  invalidEmail: {
+    es_ES: 'Correo electrónico inválido',
+    en_US: 'Invalid email',
+  },
+  emailsDontMatch: {
+    es_ES: 'Los correos electrónicos no coinciden',
+    en_US: 'Emails do not match',
+  },
+  passwordsDontMatch: {
+    es_ES: 'Las contraseñas no coinciden',
+    en_US: 'Passwords do not match',
+  },
+  invalidPhone: {
+    es_ES: 'Teléfono inválido',
+    en_US: 'Invalid phone',
+  },
+  addToCart: {
+    es_ES: 'Agregar al carrito',
+    en_US: 'Add to cart',
+  },
 }
