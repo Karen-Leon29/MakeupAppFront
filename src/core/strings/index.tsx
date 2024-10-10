@@ -47,7 +47,7 @@ export const MakeupString = {
     es_ES: 'Introduce el código de recuperación',
     en_US: 'Enter recovery code',
   },
-  lastname: {
+  lastName: {
     es_ES: 'Apellido',
     en_US: 'Lastname',
   },
@@ -118,5 +118,9 @@ export const MakeupString = {
   addToCart: {
     es_ES: 'Agregar al carrito',
     en_US: 'Add to cart',
+  },
+  addUser: {
+    es_ES: 'Agregar usuario',
+    en_US: 'Add user',
   },
 }

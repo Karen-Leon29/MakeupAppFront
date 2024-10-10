@@ -1,9 +1,9 @@
-import { Users, UsersRequest } from "core/types/requests"
+import { LoginRequest, LoginResponse, Users, UsersRequest, UsersResponse } from "core/types/requests"
 import { GET, POST } from "./requests"
 
 
 export const getUsers = async () => {
-    const response = GET('/api-user/listUser')
+    const response = GET<UsersResponse>('/api-user/listUser')
     return response
 }
 
@@ -18,6 +18,6 @@ export const createUser = async (data: UsersRequest) => {
 }
 
 export const login = async(body: {email: string, password: string}) => {
-    const response = POST<Users>('/api-user/login', body)
+    const response = POST<LoginResponse, LoginRequest>('/api-user/login', body)
     return response
 }

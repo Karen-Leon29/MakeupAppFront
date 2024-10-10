@@ -24,12 +24,13 @@ export const LoginPage: React.FC = () => {
   const { setAlert } = useContext(AppContext)
 
   const handleLogin = async () => {
-    const user = await login({
+    const { data: user } = await login({
       email,
       password,
     })
 
-    if (user.data) {
+    if (user) {
+      localStorage.setItem('token', user.token)
       if (rememberMe) {
         localStorage.setItem('credentials', JSON.stringify({ email, password }))
       }

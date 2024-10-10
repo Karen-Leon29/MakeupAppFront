@@ -109,7 +109,7 @@ export const RegisterPage: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
           />
           <PrimaryInput
-            label={translations.lastname}
+            label={translations.lastName}
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
@@ -148,7 +148,6 @@ export const RegisterPage: React.FC = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
-        {/* Mostrar mensaje de error si existe */}
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
             {error}

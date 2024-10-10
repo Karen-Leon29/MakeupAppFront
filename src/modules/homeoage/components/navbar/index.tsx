@@ -27,7 +27,7 @@ import {
 } from '@mui/icons-material'
 import { useStyles } from './styles'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CategoriesResponse, getCategories } from 'core/services'
+import { CategoriesResponse, getCategories, getUsers } from 'core/services'
 import logo from 'assets/pics/logo.png'
 
 export const NavbarComponent: React.FC = () => {
@@ -62,6 +62,8 @@ export const NavbarComponent: React.FC = () => {
 
   const handleCategories = async () => {
     const { data: resp } = await getCategories()
+    const { data: users } = await getUsers()
+    console.log("users", users)
     if (resp) setCategories(resp)
   }
 
