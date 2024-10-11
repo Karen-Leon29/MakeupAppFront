@@ -35,10 +35,10 @@ export const NavbarComponent: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false)
   const [categories, setCategories] = useState<CategoriesResponse[]>([])
   const [selectedCategories, setSelectedCategories] = useState<CategoriesResponse[]>([]) // Nuevo estado
-  const classes = useStyles
   const navigate = useNavigate()
   const { pathname } = useLocation()
-
+  const isDashboard = pathname.includes('dashboard')
+  const classes = useStyles(isDashboard)
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -63,12 +63,12 @@ export const NavbarComponent: React.FC = () => {
   const handleCategories = async () => {
     const { data: resp } = await getCategories()
     const { data: users } = await getUsers()
-    console.log("users", users)
+    console.log('users', users)
     if (resp) setCategories(resp)
   }
 
   const handleSelectCategory = (category: CategoriesResponse) => {
-    if(pathname !== '/homepage') navigate('/homepage')
+    if (pathname !== '/homepage') navigate('/homepage')
     if (!selectedCategories.find((c) => c.id === category.id)) {
       setSelectedCategories((prev) => [...prev, category])
     }

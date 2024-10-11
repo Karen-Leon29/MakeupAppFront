@@ -1,5 +1,6 @@
 import { RegisterPage, LoginPage, RecoveryPassword, NewPassword } from 'modules/auth/pages'
 import { DashboardPage } from 'modules/dashboard/pages'
+import { CategoryManagement } from 'modules/dashboard/pages/categories'
 import { RegisterUsers } from 'modules/dashboard/pages/register'
 import { AboutUs, HomePage, ContactUs } from 'modules/homeoage/pages'
 import { ProductDetailPage } from 'modules/product/pages'
@@ -16,8 +17,9 @@ export const RoutesProvider = () => {
       <Route path={'/about-us'} element={<AboutUs />} />
       <Route path={'/contact-us'} element={<ContactUs />} />
       <Route path={'/product-detail/:id'} element={<ProductDetailPage />} />
-      <Route path={'/users'} element={<DashboardPage />} />
-      <Route path={'/users/register'} element={<RegisterUsers />} />
+      <Route path={'/dashboard/users'} element={<DashboardPage />} />
+      <Route path={'/dashboard/users/register'} element={<RegisterUsers />} />
+      <Route path={'/dashboard/categories'} element={<CategoryManagement />} />
       <Route path={'*'} element={<LoginPage />} />
     </Routes>
   )

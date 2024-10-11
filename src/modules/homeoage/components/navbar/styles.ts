@@ -1,9 +1,10 @@
 import { SxStyles } from "core/types/styles";
 
-export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer' | 'link' | 'search' | 'searchIconWrapper' | 'inputBase' | 'iconButton' | 'categotySelect'> = (() => {
+export const useStyles: (isDashboard: boolean) => SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer' | 'link' | 'search' | 'searchIconWrapper' | 'inputBase' | 'iconButton' | 'categotySelect'> = (isDashboard) => {
     return {
         appBar: {
-            bgcolor: 'white',
+            bgcolor: isDashboard ? '#B682FA' : '#FFF',
+            color: isDashboard ? '#FFF' : '#6C4D94',
             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
         },
         toolbar: {
@@ -16,7 +17,7 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
         logo: {
             fontSize: '1.5rem',
             fontWeight: 'bold',
-            color: '#B682FA',
+            color: isDashboard ? '#FFF' : '#B682FA',
             textDecoration: 'none',
         },
         linksContainer: {
@@ -26,13 +27,13 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
             gap: '1rem',
         },
         link: {
-            color: '#B682FA',
+            color: isDashboard ? '#FFF' : '#B682FA',
             textDecoration: 'none',
             fontSize: '1rem',
             fontWeight: 'bold',
             cursor: 'pointer',
             '&:hover': {
-                color: '#6C4D94',
+                color: isDashboard ? '#EEE' : '#6C4D94',
             },
         },
         search: {
@@ -48,7 +49,8 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
             p: '10px',
             height: '100%',
             pointerEvents: 'none',
-            bgcolor: '#B682FA',
+            bgcolor: isDashboard ? '#FFF' : '#B682FA',
+            color: isDashboard ? '#B682FA' : '#FFF',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -57,20 +59,21 @@ export const useStyles: SxStyles<'appBar' | 'toolbar' | 'logo' | 'linksContainer
         inputBase: {
             pl: '15px',
             py: '5px',
-            border: '1px solid #B682FA',
+            border: isDashboard ? '1px solid #FFF' : '1px solid #B682FA',
             borderRadius: '10px 0 0 10px',
+            color: isDashboard ? '#FFF' : '#6C4D94',
         },
         iconButton: {
-            color: '#B682FA',
-            bgcolor: '#B682FA33',
+            color: isDashboard ? '#FFF' : '#B682FA',
+            bgcolor: isDashboard ? '#FFFFFF33' : '#B682FA33',
         },
         categotySelect: {
             display: 'flex',
             flexDirection: 'column',
-            color: '#6C4D94',
+            color: isDashboard ? '#FFF' : '#6C4D94',
             fontWeight: 'bold',
             fontSize: '1.1rem',
             pb: '5px',
         },
-    };  
-})();
+    };
+};

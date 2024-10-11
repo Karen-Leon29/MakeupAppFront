@@ -83,7 +83,7 @@ export const RegisterUsers = () => {
 
     const data = await createUser(newUser)
     if (data.data) {
-      navigate('/users')
+      navigate('/dashboard/users')
     }
   }
 
