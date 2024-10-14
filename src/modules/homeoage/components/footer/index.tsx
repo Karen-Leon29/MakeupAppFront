@@ -11,7 +11,7 @@ export const FooterComponent: React.FC = () => {
     <AppBar position="static" sx={classes.appBar}>
       <Toolbar sx={classes.toolbar}>
         <Typography sx={classes.leftText}>
-          Aimar Bayona Barrientos - Todos los derechos reservados
+          Makeup Dory - Todos los derechos reservados
         </Typography>
         <Box sx={classes.iconContainer}>
           <IconButton sx={classes.icon}>

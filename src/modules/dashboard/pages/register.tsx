@@ -2,13 +2,13 @@ import { useLittera } from '@assembless/react-littera'
 import { Grid, Typography, Box } from '@mui/material'
 import { PrimaryButton } from 'core/components/button/primaryButton'
 import { PrimaryInput } from 'core/components/input/primaryInput'
-import { TitleHeader } from 'core/components/title/header'
 import { createUser } from 'core/services'
 import { MakeupString } from 'core/strings'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DashboardLayout } from '../layouts'
 import AddLocationRoundedIcon from '@mui/icons-material/AddLocationRounded'
+import { ArrowBack } from '@mui/icons-material'
 
 export const RegisterUsers = () => {
   const translations = useLittera(MakeupString)
@@ -105,16 +105,20 @@ export const RegisterUsers = () => {
           borderRadius: 2,
         }}
       >
-        <TitleHeader
-          title={translations.addUser}
+        <Typography
+          variant="h4"
+          gutterBottom
           sx={{
-            textTransform: 'uppercase',
-            fontSize: '2.3rem',
-            mb: 3,
-            textAlign: 'center',
+            color: 'primary.dark',
+            fontWeight: 700,
           }}
-        />
-
+        >
+          <ArrowBack
+            sx={{ cursor: 'pointer', marginRight: 2, color: 'primary.dark', fontSize: '30px' }}
+            onClick={() => navigate('/dashboard/users')}
+          />
+          {translations.registerUser}
+        </Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={4}>
             <PrimaryInput
@@ -188,13 +192,12 @@ export const RegisterUsers = () => {
               sx={{ width: '100%' }}
             />
           </Grid>
-
-          </Grid>
-          {error && (
-            <Typography color="error" sx={{ textAlign: 'center', mt: 2 }}>
-              {error}
-            </Typography>
-          )}
+        </Grid>
+        {error && (
+          <Typography color="error" sx={{ textAlign: 'center', mt: 2 }}>
+            {error}
+          </Typography>
+        )}
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <PrimaryButton type="submit" sx={{ width: '33%' }}>
             {translations.addUser}

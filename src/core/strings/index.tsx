@@ -3,6 +3,10 @@ export const MakeupString = {
     es_ES: 'Iniciar sesión',
     en_US: 'LogIn',
   },
+  registerUser: {
+    es_ES: 'Registrar Usuario',
+    en_US: 'Register User',
+  },
   password: {
     es_ES: 'Contraseña',
     en_US: 'Password',

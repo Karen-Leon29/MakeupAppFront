@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
-import { Box, Container, TextField, Button, Typography, Grid, IconButton } from '@mui/material'
+import {
+  Box,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Grid,
+  IconButton,
+  Snackbar,
+  Alert,
+} from '@mui/material'
 import { useSpring, animated } from 'react-spring'
 import { NavbarComponent } from 'modules/homeoage/components/navbar'
 import {
@@ -16,6 +26,7 @@ export const ContactUs: React.FC = () => {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState({ name: '', email: '', message: '' })
+  const [isSubmited, setIsSubmited] = useState(false)
 
   const fadeIn = useSpring({
     opacity: 1,
@@ -37,7 +48,10 @@ export const ContactUs: React.FC = () => {
     setErrors(newErrors)
 
     if (!newErrors.name && !newErrors.email && !newErrors.message) {
-      console.log({ name, email, message })
+      setName('')
+      setEmail('')
+      setMessage('')
+      setIsSubmited(true)
     }
   }
 
@@ -149,6 +163,17 @@ export const ContactUs: React.FC = () => {
             </Box>
           </animated.div>
         </Container>
+
+        <Snackbar
+          open={isSubmited}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          autoHideDuration={5000}
+          onClose={() => setIsSubmited(false)}
+        >
+          <Alert onClose={() => setIsSubmited(false)} severity="info" variant='filled'>
+            Mensaje enviado correctamente
+          </Alert>
+        </Snackbar>
       </ContactUsContainer>
     </Box>
   )

@@ -32,7 +32,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
   const displayedUsers = users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
   return (
-    <Box sx={{ margin: 2 }}>
+    <Box sx={{ my: 2 }}>
       <TableContainer component={Paper} sx={{ boxShadow: 4, borderRadius: 2 }}>
         <Table>
           <TableHead sx={{ backgroundColor: 'primary.light' }}>

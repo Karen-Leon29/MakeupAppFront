@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Toolbar, Button, Box } from '@mui/material'
+import { Toolbar, Button, Box, Typography } from '@mui/material'
 import { UsersTable } from '../components/tableUser'
 import * as XLSX from 'xlsx'
 import { getUsers } from 'core/services'
@@ -36,7 +36,18 @@ export const DashboardPage: React.FC = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <Box>
+        <Box sx={{padding: 4}}>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              color: 'primary.dark',
+              fontWeight: 700,
+              marginBottom: 4,
+            }}
+          >
+            Gestión de Usuarios
+          </Typography>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
               variant="contained"

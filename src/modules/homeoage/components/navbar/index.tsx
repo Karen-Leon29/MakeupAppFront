@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -27,8 +27,9 @@ import {
 } from '@mui/icons-material'
 import { useStyles } from './styles'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CategoriesResponse, getCategories, getUsers } from 'core/services'
+import { CategoriesResponse, getCategories } from 'core/services'
 import logo from 'assets/pics/logo.png'
+import { AppContext } from 'core/contexts'
 
 export const NavbarComponent: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -38,6 +39,7 @@ export const NavbarComponent: React.FC = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const isDashboard = pathname.includes('dashboard')
+  const { products } = useContext(AppContext)
   const classes = useStyles(isDashboard)
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -62,8 +64,6 @@ export const NavbarComponent: React.FC = () => {
 
   const handleCategories = async () => {
     const { data: resp } = await getCategories()
-    const { data: users } = await getUsers()
-    console.log('users', users)
     if (resp) setCategories(resp)
   }
 
@@ -87,9 +87,15 @@ export const NavbarComponent: React.FC = () => {
     <>
       <AppBar position="static" sx={classes.appBar}>
         <Toolbar sx={classes.toolbar}>
-          <Typography sx={classes.logo}>
+          <Box
+            sx={classes.logo}
+            onClick={() => {
+              if (isDashboard) navigate('/homepage')
+              else navigate('/dashboard/users')
+            }}
+          >
             <img src={logo} alt="Logo" style={{ height: '60px', marginTop: '10px' }} />
-          </Typography>
+          </Box>
           <Box sx={classes.linksContainer}>
             <Box onClick={() => navigate('/homepage')}>
               <Typography sx={classes.link}>Inicio</Typography>
@@ -135,8 +141,13 @@ export const NavbarComponent: React.FC = () => {
             <IconButton sx={classes.iconButton} onClick={handleOpenDialog}>
               <PersonIcon />
             </IconButton>
-            <IconButton sx={classes.iconButton}>
-              <Badge badgeContent={4} color="error">
+            <IconButton
+              sx={classes.iconButton}
+              onClick={() => {
+                navigate('/shopping-car')
+              }}
+            >
+              <Badge badgeContent={products.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -165,15 +176,39 @@ export const NavbarComponent: React.FC = () => {
       )}
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Cerrar Sesión</DialogTitle>
+        <DialogTitle
+          sx={{
+            backgroundColor: 'primary.main',
+            color: 'white',
+            fontWeight: 700,
+            mb: 5,
+          }}
+        >
+          CERRAR SESIÓN
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>¿Estás seguro de que deseas cerrar sesión?</DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+        <DialogActions
+          sx={{
+            my: 1,
+          }}
+        >
+          <Button onClick={handleCloseDialog} color="inherit">
             Cancelar
           </Button>
-          <Button onClick={handleLogout} color="primary" autoFocus>
+          <Button
+            onClick={handleLogout}
+            autoFocus
+            sx={{
+              backgroundColor: 'primary.main',
+              color: 'white',
+              px: 2,
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+              },
+            }}
+          >
             Aceptar
           </Button>
         </DialogActions>

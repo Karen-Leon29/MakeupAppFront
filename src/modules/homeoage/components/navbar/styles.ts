@@ -19,6 +19,7 @@ export const useStyles: (isDashboard: boolean) => SxStyles<'appBar' | 'toolbar' 
             fontWeight: 'bold',
             color: isDashboard ? '#FFF' : '#B682FA',
             textDecoration: 'none',
+            cursor: 'pointer',
         },
         linksContainer: {
             display: 'flex',

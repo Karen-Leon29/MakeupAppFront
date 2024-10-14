@@ -18,6 +18,10 @@ const theme = createTheme({
       primary: '#000',
       secondary: '#333',
     },
+    error: {
+      main: '#FF0000',
+      light: '#FFCDD2',
+    },
   },
   typography: {
     fontFamily: 'Arial, sans-serif',

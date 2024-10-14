@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Slide,
   Snackbar,
   TextField,
   Tooltip,
@@ -24,6 +25,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import { DashboardLayout } from '../layouts'
 import { DeleteOutline, EditOutlined } from '@mui/icons-material'
 import Spinner from 'core/components/spinner'
+import theme from 'core/theme/theme'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -44,10 +46,19 @@ export const CategoryManagement = () => {
   const [loading, setLoading] = useState(true)
 
   const fetchCategories = async () => {
-    const data = await getCategories()
-    if (data.data) setCategories(data.data)
-    setLoading(false)
+    try {
+      setLoading(true)
+      const data = await getCategories()
+      if (data.data) setCategories(data.data)
+    } catch (error) {
+      setSnackbarMessage('Error al cargar las categorías')
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    } finally {
+      setLoading(false)
+    }
   }
+  
 
   useEffect(() => {
     fetchCategories()
@@ -142,7 +153,7 @@ export const CategoryManagement = () => {
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%' }}>
           <Tooltip title="Editar" placement="top" arrow>
-            <EditOutlined color="primary" onClick={() => handleEditCategory(params.row)} />
+            <EditOutlined color="info" onClick={() => handleEditCategory(params.row)} />
           </Tooltip>
           <Tooltip title="Eliminar" placement="top" arrow>
             <DeleteOutline color="error" onClick={() => handleOpenDeleteDialog(params.row.id)} />
@@ -239,7 +250,7 @@ export const CategoryManagement = () => {
               <Button
                 variant="contained"
                 color="primary"
-                sx={{ width: '200px', alignSelf: 'end', mt: 1 }}
+                sx={{ width: '200px', alignSelf: 'end', mt: 1, py: 1, px: 2 }}
                 onClick={editingCategoryId ? handleUpdateCategory : handleAddCategory}
               >
                 {editingCategoryId ? 'Actualizar' : 'Agregar'}
@@ -248,19 +259,46 @@ export const CategoryManagement = () => {
           </Box>
 
           <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>Confirmar Eliminación</DialogTitle>
+            <DialogTitle
+              sx={{
+                backgroundColor: theme.palette.error.main,
+                color: 'white',
+                fontWeight: 700,
+                mb: 5,
+              }}
+            >
+              CONFIRMAR ELIMINACIÓN
+            </DialogTitle>
             <DialogContent>
               <Typography>¿Estás seguro de que deseas eliminar esta categoría?</Typography>
             </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
-              <Button onClick={handleDeleteCategory} color="error">
+            <DialogActions sx={{ my: 1 }}>
+              <Button onClick={() => setOpenDialog(false)} color="inherit">
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleDeleteCategory}
+                sx={{
+                  backgroundColor: 'error.main',
+                  color: 'white',
+                  px: 2,
+                  '&:hover': {
+                    backgroundColor: 'error.dark',
+                  },
+                }}
+              >
                 Eliminar
               </Button>
             </DialogActions>
           </Dialog>
 
-          <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleSnackbarClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            TransitionComponent={(props) => <Slide {...props} direction="down" />}
+          >
             <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
               {snackbarMessage}
             </Alert>

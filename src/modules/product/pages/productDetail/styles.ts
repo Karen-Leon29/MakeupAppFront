@@ -1,3 +1,4 @@
+import theme from "core/theme/theme"
 import { SxStyles } from "core/types/styles"
 
 export const useStyles: SxStyles<
@@ -60,7 +61,7 @@ export const useStyles: SxStyles<
             productTitle: {
                 marginBottom: '10px',
                 fontWeight: 'bold',
-                color: '#333',
+                color: theme.palette.primary.dark,
             },
             productPrice: {
                 marginBottom: '15px',

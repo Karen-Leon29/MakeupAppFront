@@ -44,13 +44,14 @@ export const useStyles: SxStyles<'drawer' | 'header' | 'title' | 'listItem' | 'c
       },
       '& .react-calendar__tile': {
         borderRadius: '5px',
-        color: '#000000', 
+        color: '#000000',
         backgroundColor: 'transparent',
         transition: 'background-color 0.3s ease, color 0.3s ease',
       },
       '& .react-calendar__tile--active': {
-        backgroundColor: '#B682FA',
-        color: '#FFFFFF',
+        color: '#FFFFFF !important',
+        border: '2px solid #B682FA',
+        backgroundColor: '#B682FA !important',
       },
       '& .react-calendar__tile:hover': {
         backgroundColor: '#D3C6F5',
