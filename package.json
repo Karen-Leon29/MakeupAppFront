@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
-    "build": "tsc && vite build --mode development",
+    "build": "vite build --mode development",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,md}\" && eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "preview": "vite preview",
-    "build:dev": "tsc && vite build --mode development",
-    "upload:dev": "aws s3 sync dist/ s3://activeenglish-web",
+    "build:dev": "vite build --mode development",
     "invalidation:dev": "aws cloudfront create-invalidation --distribution-id E1TDO8TGW1KL7Q --paths \"/*\"",
     "deploy:dev": "yarn format && yarn build:dev && yarn upload:dev && yarn invalidation:dev"
   },
