@@ -3,6 +3,10 @@ export const MakeupString = {
     es_ES: 'Iniciar sesión',
     en_US: 'LogIn',
   },
+  registerUser: {
+    es_ES: 'Registrar Usuario',
+    en_US: 'Register User',
+  },
   password: {
     es_ES: 'Contraseña',
     en_US: 'Password',
@@ -47,7 +51,7 @@ export const MakeupString = {
     es_ES: 'Introduce el código de recuperación',
     en_US: 'Enter recovery code',
   },
-  lastname: {
+  lastName: {
     es_ES: 'Apellido',
     en_US: 'Lastname',
   },
@@ -82,5 +86,45 @@ export const MakeupString = {
   haveAcount: {
     es_ES: '¿Ya tienes una cuenta?',
     en_US: 'Already have an account?',
+  },
+  specialOffers: {
+    es_ES: 'Ofertas especiales',
+    en_US: 'Special offers',
+  },
+  checkProducts: {
+    es_ES: '¡Echa un vistazo a nuestros productos!',
+    en_US: 'Check out our latest deals on Makeup products!',
+  },
+  buyNow: {
+    es_ES: 'Comprar ahora',
+    en_US: 'Buy now',
+  },
+  fieldsRequired: {
+    es_ES: 'Todos los campos son obligatorios',
+    en_US: 'All fields are required',
+  },
+  invalidEmail: {
+    es_ES: 'Correo electrónico inválido',
+    en_US: 'Invalid email',
+  },
+  emailsDontMatch: {
+    es_ES: 'Los correos electrónicos no coinciden',
+    en_US: 'Emails do not match',
+  },
+  passwordsDontMatch: {
+    es_ES: 'Las contraseñas no coinciden',
+    en_US: 'Passwords do not match',
+  },
+  invalidPhone: {
+    es_ES: 'Teléfono inválido',
+    en_US: 'Invalid phone',
+  },
+  addToCart: {
+    es_ES: 'Agregar al carrito',
+    en_US: 'Add to cart',
+  },
+  addUser: {
+    es_ES: 'Agregar usuario',
+    en_US: 'Add user',
   },
 }
