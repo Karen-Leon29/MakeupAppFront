@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS='--max-old-space-size=8192' yarn build",
+    "dev": "vite --mode development",
     "build": "NODE_OPTIONS='--max-old-space-size=8192' yarn build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,md}\" && eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
