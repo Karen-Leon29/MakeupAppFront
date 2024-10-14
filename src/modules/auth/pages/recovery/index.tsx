@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 export const RecoveryPassword: React.FC = () => {
   const translations = useLittera(MakeupString)
   const navigate = useNavigate()
-  const [transition, setTransition] = useState(false)
+  const transition = false
   const codeRecovery: string[] = ['', '', '', '', '', '']
   const [isCodeRecovery, setIsCodeRecovery] = useState<boolean>(false)
 

@@ -17,12 +17,18 @@ export const useValidations = () => {
             .refine(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(value), {
                 message: translations.passwordInvalid
             }),
-        confirmPassword: z
+        confirmPassword: (password: string) => z
             .string()
             .min(1, { message: translations.confirmPasswordRequired })
-            .refine((value: any, ctx: { parent: { password: any } }) => value === ctx.parent.password, {
-                message: translations.passwordsDoNotMatch
-            }, { path: ['confirmPassword'] }),
+            .superRefine((value: string, ctx) => {
+                if (value !== password) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: translations.passwordsDoNotMatch,
+                    });
+                }
+            })
+        ,
         username: z
             .string()
             .min(1, { message: translations.usernameRequired })
