@@ -11,49 +11,47 @@ import {
 import { ArrowForward as ArrowForwardIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import { useStyles } from './styles'
 import { FilterCategory } from '../filter'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useLittera } from '@assembless/react-littera'
 import { MakeupString } from 'core/strings'
 import { useNavigate } from 'react-router-dom'
 import { AppContext, Product } from 'core/contexts'
+import { getProducts, ProductsResponse } from 'core/services'
 
-export const BodyComponent = () => {
+export const BodyComponent = ({
+  onlyFirstRow = false,
+  id,
+}: {
+  onlyFirstRow?: boolean
+  id?: number
+}) => {
   const translations = useLittera(MakeupString)
   const classes = useStyles
   const navigate = useNavigate()
   const [openFilter, setOpenFilter] = useState<boolean>(false)
-  const { setProducts } = useContext(AppContext) as { setProducts: React.Dispatch<React.SetStateAction<Product[]>> }
+  const { setProducts } = useContext(AppContext) as {
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>
+  }
+  const [productsList, setProductsList] = useState<ProductsResponse[]>([])
 
-  const productsList = [
-    {
-      id: 1,
-      nameProduct: 'Colección de Labiales',
-      description: 'Descubre nuestra nueva gama de labiales vibrantes y de larga duración.',
-      img: 'https://www.businessempresarial.com.pe/wp-content/uploads/2021/04/Set-labiales-1.png',
-    },
-    {
-      id: 2,
-      nameProduct: 'Esenciales para el Cuidado de la Piel',
-      description: 'Mima tu piel con nuestros productos de cuidado cuidadosamente elaborados.',
-      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDxHzzOxsu4yrfjNoQ3sJ_t2mJtakviiAIMw&s',
-    },
-    {
-      id: 3,
-      nameProduct: 'Brochas de Maquillaje',
-      description: 'Brochas de alta calidad para una aplicación de maquillaje impecable.',
-      img: 'https://ecotiendaforesta.com/cdn/shop/products/PhotoRoom-20220101_201347.png?v=1641086347',
-    },
-    {
-      id: 4,
-      nameProduct: 'Paleta Edición Limitada',
-      description: 'Paleta de sombras exclusiva con tonos impresionantes.',
-      img: 'https://www.anyeluz.com/cdn/shop/files/Paleta_Pink_cuadrado_1.png?v=1718163311&width=1080',
-    },
-  ]
+  useEffect(() => {
+    const handleProducts = async () => {
+      const resp = await getProducts()
+      if (resp.data) setProductsList(resp.data)
+    }
+    handleProducts()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleFilter = () => {
     setOpenFilter((prev) => !prev)
   }
+
+  const existingProduct = productsList.find((p) => p.id === id)
+  const filteredProducts = onlyFirstRow
+    ? existingProduct
+      ? productsList.filter((p) => p.id !== id).slice(0, 4)
+      : productsList.slice(0, 5)
+    : productsList
 
   return (
     <Box sx={{ minWidth: '100%' }}>
@@ -66,13 +64,19 @@ export const BodyComponent = () => {
         )}
       </Box>
       <Box sx={classes.bodyContainer}>
-        {productsList.map((product) => (
+        {filteredProducts.map((product) => (
           <Card key={product.id} sx={classes.card}>
             <Box sx={classes.imageContainer}>
               <img
-                src={product.img}
+                src={typeof product.photoProduct[0] === 'string' ? product.photoProduct[0] : ''}
                 alt={product.nameProduct}
-                style={{ width: '100%', height: 'auto' }}
+                style={{
+                  width: '100%',
+                  height: 200,
+                  minHeight: 200,
+                  objectFit: 'cover',
+                  maxHeight: 200,
+                }}
               />
             </Box>
             <CardContent>
@@ -88,11 +92,21 @@ export const BodyComponent = () => {
                 sx={classes.cardButton}
                 onClick={() => {
                   setProducts((prev: Product[]) => {
-                    const existingProduct = prev.find(p => p.id === product.id)
+                    const existingProduct = prev.find((p) => p.id === product.id)
                     if (existingProduct) {
-                      return prev.map(p => p.id === product.id ? { ...p, amount: (p.amount ?? 0) + 1 } : p)
+                      return prev.map((p) =>
+                        p.id === product.id ? { ...p, amount: (p.amount ?? 0) + 1 } : p
+                      )
                     }
-                    return [...prev, { ...product, amount: 1, photoProduct: [product.img], price: 29.99 }]
+                    return [
+                      ...prev,
+                      { 
+                        ...product, 
+                        amount: 1, 
+                        photoProduct: [typeof product.photoProduct[0] === 'string' ? product.photoProduct[0] : ''], 
+                        price: 29.99 
+                      },
+                    ]
                   })
                 }}
               >

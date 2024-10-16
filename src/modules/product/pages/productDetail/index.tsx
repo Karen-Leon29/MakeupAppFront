@@ -1,13 +1,14 @@
 import { Box, Typography, Button, Grid, Paper, Snackbar, Alert } from '@mui/material'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useLittera } from '@assembless/react-littera'
 import { MakeupString } from 'core/strings'
 import { AddShoppingCart, ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import { useStyles } from './styles'
 import theme from 'core/theme/theme'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { BodyComponent } from 'modules/homeoage/components/body'
 import { AppContext } from 'core/contexts'
+import { getProduct, ProductsResponse } from 'core/services'
 
 export const ProductDetailPage = () => {
   const classes = useStyles
@@ -16,21 +17,16 @@ export const ProductDetailPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const navigate = useNavigate()
   const { setProducts, products } = useContext(AppContext)
+  const [product, setProduct] = useState<ProductsResponse | null>(null)
+  const { id } = useParams()
 
-  const product = {
-    id: 4,
-    nameProduct: 'Paleta Edición Limitada',
-    description: 'Paleta de sombras exclusiva con tonos impresionantes.',
-    price: 29.99,
-    brand: 'MakeupCo',
-    amount: 10,
-    presentation: '12 tonos',
-    img: [
-      'https://www.anyeluz.com/cdn/shop/files/Paleta_Pink_cuadrado_1.png?v=1718163311&width=1080',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDxHzzOxsu4yrfjNoQ3sJ_t2mJtakviiAIMw&s',
-      'https://ecotiendaforesta.com/cdn/shop/products/PhotoRoom-20220101_201347.png?v=1641086347',
-    ],
-  }
+  useEffect(() => {
+    const handleProduct = async () => {
+      const resp = await getProduct(Number(id))
+      if (resp.data) setProduct(resp.data)
+    }
+    handleProduct()
+  }, [id])
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image)
@@ -39,7 +35,11 @@ export const ProductDetailPage = () => {
   const handleAddToCart = () => {
     setOpenSnackbar(true)
     const newProducts = products
-    newProducts.push(product)
+    if (!product) return
+    newProducts.push({
+      ...product,
+      photoProduct: product.photoProduct.map(photo => typeof photo === 'string' ? photo : '')
+    })
     setProducts(newProducts)
   }
 
@@ -63,34 +63,36 @@ export const ProductDetailPage = () => {
             marginRight: '10px',
           }}
         />
-        {product.nameProduct}
+        {product?.nameProduct}
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <Box sx={classes.imageContainer}>
             <Box sx={classes.thumbnailContainer}>
-              {product.img.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Producto miniatura ${index}`}
-                  onClick={() => handleImageClick(img)}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    objectFit: 'cover',
-                    cursor: 'pointer',
-                    transition: 'border 0.3s ease, transform 0.3s',
-                    borderRadius: '8px',
-                    border: selectedImage === img ? `2px solid ${theme.palette.primary.main}` : '',
-                    transform: selectedImage === img ? 'scale(1.05)' : 'scale(1)',
-                  }}
-                />
-              ))}
+              {Array.isArray(product?.photoProduct) &&
+                product.photoProduct.map((img, index) => (
+                  <img
+                    key={index}
+                    src={typeof img === 'string' ? img : ''}
+                    alt={`Producto miniatura ${index}`}
+                    onClick={() => handleImageClick(typeof img === 'string' ? img : '')}
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      objectFit: 'cover',
+                      cursor: 'pointer',
+                      transition: 'border 0.3s ease, transform 0.3s',
+                      borderRadius: '8px',
+                      border:
+                        selectedImage === img ? `2px solid ${theme.palette.primary.main}` : '',
+                      transform: selectedImage === img ? 'scale(1.05)' : 'scale(1)',
+                    }}
+                  />
+                ))}
             </Box>
             <Box sx={classes.mainImageContainer}>
               <img
-                src={selectedImage || product.img[0]}
+                src={selectedImage || (typeof product?.photoProduct[0] === 'string' ? product.photoProduct[0] : '') || ''}
                 alt="Imagen Principal"
                 style={{
                   width: 'auto',
@@ -108,24 +110,23 @@ export const ProductDetailPage = () => {
         <Grid item xs={12} md={5}>
           <Paper sx={classes.descriptionContainer}>
             <Typography variant="h4" sx={classes.productTitle}>
-              {product.nameProduct}
+              {product?.nameProduct}
             </Typography>
             <Typography variant="h5" sx={classes.productPrice}>
-              ${product.price}
+              ${product?.price}
             </Typography>
             <Typography variant="body1" sx={classes.productInfo}>
-              <strong>Marca:</strong> {product.brand}
+              <strong>Marca:</strong> {product?.brand}
             </Typography>
             <Typography variant="body1" sx={classes.productInfo}>
-              <strong>Cantidad disponible:</strong> {product.amount}
+              <strong>Cantidad disponible:</strong> {product?.amount}
             </Typography>
             <Typography variant="body1" sx={classes.productInfo}>
-              <strong>Presentación:</strong> {product.presentation}
+              <strong>Presentación:</strong> {product?.presentation}
             </Typography>
             <Typography variant="body2" sx={classes.productDescription}>
-              {product.description}
+              {product?.description}
             </Typography>
-
 
             <Box sx={classes.buttonsContainer}>
               <Button
@@ -174,7 +175,7 @@ export const ProductDetailPage = () => {
       </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <BodyComponent />
+          <BodyComponent onlyFirstRow id={Number(id)} />
         </Grid>
       </Grid>
 

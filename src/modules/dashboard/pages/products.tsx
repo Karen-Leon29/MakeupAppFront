@@ -31,39 +31,10 @@ export const ProductsManagement = () => {
   const productsPerPage = 6
   const navigate = useNavigate()
 
-  const placeholderImages = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-pRBWZ2hU7Bc7wlRMHH6faR01RWXUd2hDoQ&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuJWpW7-LuiLykYJVJH9AU26oD0XQY1xtUgw&s',
-    'https://cdn.articlefiesta.com/rep/696e4a0881ed4f16b9ebd8ad011fb42c.png',
-    'https://www.hogarmania.com/archivos/202011/belleza-regalos-mas-vendidos-serum-facial-XxXx80.jpg',
-    'https://plus.unsplash.com/premium_photo-1679046948726-72f7d53296c5?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjdG9zJTIwZGUlMjBiZWxsZXphfGVufDB8fDB8fHww',
-    'https://www.liderdelemprendimiento.com/wp-content/uploads/2023/07/Venta-de-productos-de-belleza-scaled.jpg',
-  ]
-
-  const getRandomPlaceholderImage = () => {
-    return placeholderImages[Math.floor(Math.random() * placeholderImages.length)]
-  }
-
-  const generateDummyProducts = () => {
-    const dummyProducts: ProductsResponse[] = Array.from({ length: 12 }, (_, index) => ({
-      id: index + 1,
-      nameProduct: `Producto Simulado ${index + 1}`,
-      description: `Descripción del producto simulado ${index + 1}`,
-      price: Math.floor(Math.random() * 100) + 10,
-      amount: Math.floor(Math.random() * 50) + 1,
-      codeProduct: `CODE-${index + 100}`,
-      photoProduct: placeholderImages,
-      category: { id: 1 },
-    }))
-    setProducts(dummyProducts)
-  }
-
   const fetchProducts = async () => {
     const response = await getProducts()
     if (response.data && response.data.length > 0) {
       setProducts(response.data)
-    } else {
-      generateDummyProducts()
     }
     setLoading(false)
   }
@@ -155,7 +126,7 @@ export const ProductsManagement = () => {
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      backgroundImage: `url(${getRandomPlaceholderImage()})`,
+                      backgroundImage: `url(${product.photoProduct[0] || ''})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       opacity: 0.3,
@@ -260,36 +231,37 @@ export const ProductsManagement = () => {
                     scrollbarWidth: 'none',
                   }}
                 >
-                  {selectedProduct?.photoProduct.map((photo, index) => (
-                    <Box
-                      key={index}
-                      component="img"
-                      src={photo}
-                      alt={`Foto ${index + 1}`}
-                      sx={{
-                        width: '100px',
-                        height: '80px',
-                        cursor: 'pointer',
-                        objectFit: 'cover',
-                        borderRadius: 2,
-                        border: index === 0 ? '2px solid ' + theme.palette.primary.main : 'none',
-                      }}
-                      onClick={() => {
-                        if (selectedProduct) {
-                          const updatedPhotos = [...selectedProduct.photoProduct]
-                          ;[updatedPhotos[0], updatedPhotos[index]] = [
-                            updatedPhotos[index],
-                            updatedPhotos[0],
-                          ]
-                          setSelectedProduct({ ...selectedProduct, photoProduct: updatedPhotos })
-                        }
-                      }}
-                    />
-                  ))}
+                  {Array.isArray(selectedProduct?.photoProduct) &&
+                    selectedProduct?.photoProduct?.map((photo, index) => (
+                      <Box
+                        key={index}
+                        component="img"
+                        src={photo}
+                        alt={`Foto ${index + 1}`}
+                        sx={{
+                          width: '100px',
+                          height: '80px',
+                          cursor: 'pointer',
+                          objectFit: 'cover',
+                          borderRadius: 2,
+                          border: index === 0 ? '2px solid ' + theme.palette.primary.main : 'none',
+                        }}
+                        onClick={() => {
+                          if (selectedProduct) {
+                            const updatedPhotos = [...(selectedProduct.photoProduct ?? [])]
+                            ;[updatedPhotos[0], updatedPhotos[index]] = [
+                              updatedPhotos[index],
+                              updatedPhotos[0],
+                            ]
+                            setSelectedProduct({ ...selectedProduct, photoProduct: updatedPhotos })
+                          }
+                        }}
+                      />
+                    ))}
                 </Box>
                 <Box
                   component="img"
-                  src={selectedProduct?.photoProduct[0]}
+                  src={selectedProduct?.photoProduct[0] || ''}
                   alt={selectedProduct?.nameProduct}
                   sx={{
                     borderRadius: 2,

@@ -32,7 +32,7 @@ export const useStyles: SxStyles<
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: '450px',
+        minHeight: '400px',
         '&:hover': {
           transform: 'translateY(-10px)',
         },
@@ -50,7 +50,6 @@ export const useStyles: SxStyles<
       cardTitle: {
         fontWeight: 'bold',
         color: '#6C4D94',
-        marginBottom: '0.5rem',
       },
       cardDescription: {
         color: '#6C4D94',

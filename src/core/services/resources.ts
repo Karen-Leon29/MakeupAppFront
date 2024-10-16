@@ -33,8 +33,10 @@ export interface ProductsResponse {
     price: number;
     amount: number;
     codeProduct: string;
-    photoProduct: string[];
+    photoProduct: string[] ;
     category: Category;
+    presentation?: string;
+    brand?: string;
 }
 
 export const getCategories = async () => {
