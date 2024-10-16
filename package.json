@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
-    "build": "node --max-old-space-size=4096 node_modules/.bin/vite build",
+    "build": "tsc && vite build --mode development",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,md}\" && eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "preview": "vite preview",
-    "build:dev": "vite build --mode development",
+    "build:dev": "tsc && vite build --mode development",
     "deploy:dev": "yarn format && yarn build:dev && yarn upload:dev && yarn invalidation:dev"
   },
   "dependencies": {

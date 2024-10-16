@@ -11,8 +11,5 @@ export default defineConfig({
       assets: '/src/assets',
     },
   },
-  build: {
-    chunkSizeWarningLimit: 2500,
-    ssr: false
-  },
+  build: { chunkSizeWarningLimit: 2500 },
 })
