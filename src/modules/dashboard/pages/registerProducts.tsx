@@ -36,7 +36,7 @@ interface Category {
 export const RegisterProducts: React.FC = () => {
   const { register, handleSubmit, setValue, watch } = useForm<ProductsRequest>()
   const [loading, setLoading] = useState(true)
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
   const onSubmit = async (data: ProductsRequest) => {
@@ -45,6 +45,7 @@ export const RegisterProducts: React.FC = () => {
     } else {
       await postProduct(data)
     }
+    navigate('/dashboard/products')
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,111 +109,72 @@ export const RegisterProducts: React.FC = () => {
             {id ? 'Actualizar Producto' : 'Registrar Producto'}
           </Typography>
 
-          <Grid
-            container
-            xs={12}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: 2,
-              marginBottom: 2,
-              flexDirection: 'column',
-            }}
-          >
-            <Grid
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: 2,
-                flexDirection: 'row',
-              }}
-              xs={12}
-            >
-              <Grid xs={3}>
-                <Grid xs={12}>
-                  <TextField
-                    {...register('nameProduct', { required: true })}
-                    label="Nombre del Producto"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <TextField
-                    {...register('price', { required: true, valueAsNumber: true })}
-                    label="Precio"
-                    variant="outlined"
-                    type="number"
-                    fullWidth
-                    margin="normal"
-                  />
-                </Grid>
-              </Grid>
-              <Grid xs={9}>
-                <TextField
-                  {...register('description', { required: true })}
-                  label="Descripción"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  multiline
-                  rows={4.5}
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <TextField
+                {...register('nameProduct', { required: true })}
+                label="Nombre del Producto"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                {...register('price', { required: true, valueAsNumber: true })}
+                label="Precio"
+                variant="outlined"
+                type="number"
+                fullWidth
+                margin="normal"
+              />
             </Grid>
-            <Grid
-              xs={12}
-              sx={{
-                display: 'flex',
-                gap: 2,
-                flexDirection: 'row',
-              }}
-            >
-              <Grid xs={3}>
-                <TextField
-                  {...register('amount', { required: true, valueAsNumber: true })}
-                  label="Cantidad"
-                  variant="outlined"
-                  type="number"
-                  fullWidth
-                  margin="normal"
-                />
-              </Grid>
-              <Grid xs={3}>
-                <TextField
-                  {...register('codeProduct', { required: true })}
-                  label="Código del Producto"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                />
-              </Grid>
-              <Grid xs={3}>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel id="category-label">Categoría</InputLabel>
-                  <Select
-                    {...register('category.id', { required: true })}
-                    labelId="category-label"
-                    label="Categoría"
-                  >
-                    <MenuItem value={1}>Categoría 1</MenuItem>
-                    <MenuItem value={2}>Categoría 2</MenuItem>
-                    <MenuItem value={3}>Categoría 3</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+            <Grid item xs={9}>
+              <TextField
+                {...register('description', { required: true })}
+                label="Descripción"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                multiline
+                rows={4.5}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                {...register('amount', { required: true, valueAsNumber: true })}
+                label="Cantidad"
+                variant="outlined"
+                type="number"
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                {...register('codeProduct', { required: true })}
+                label="Código del Producto"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="category-label">Categoría</InputLabel>
+                <Select
+                  {...register('category.id', { required: true })}
+                  labelId="category-label"
+                  label="Categoría"
+                >
+                  <MenuItem value={1}>Categoría 1</MenuItem>
+                  <MenuItem value={2}>Categoría 2</MenuItem>
+                  <MenuItem value={3}>Categoría 3</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
 
           <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mt: 2,
-            }}
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}
           >
             <Button variant="contained" component="label" startIcon={<PhotoCamera />}>
               Subir Imágenes
@@ -225,7 +187,7 @@ export const RegisterProducts: React.FC = () => {
           </Box>
 
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            {watch('photoProduct') &&
+            {Array.isArray(watch('photoProduct')) &&
               watch('photoProduct').map((photo, index) => (
                 <Grid item key={index} xs={1}>
                   <Paper elevation={2} sx={{ position: 'relative', padding: 1, borderRadius: 1 }}>
@@ -253,7 +215,7 @@ export const RegisterProducts: React.FC = () => {
                         width: '100%',
                         maxWidth: '100%',
                         borderRadius: 4,
-                        objectFit: 'contain'
+                        objectFit: 'contain',
                       }}
                     />
                   </Paper>
