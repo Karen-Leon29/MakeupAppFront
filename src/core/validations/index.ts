@@ -20,9 +20,7 @@ export const useValidations = () => {
         confirmPassword: z
             .string()
             .min(1, { message: translations.confirmPasswordRequired })
-            .refine((value: any, ctx: { parent: { password: any } }) => value === ctx.parent.password, {
-                message: translations.passwordsDoNotMatch
-            }, { path: ['confirmPassword'] }),
+        ,
         username: z
             .string()
             .min(1, { message: translations.usernameRequired })

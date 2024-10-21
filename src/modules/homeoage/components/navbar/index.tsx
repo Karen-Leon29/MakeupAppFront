@@ -27,20 +27,22 @@ import {
 } from '@mui/icons-material'
 import { useStyles } from './styles'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CategoriesResponse, getCategories } from 'core/services'
+import { CategoriesResponse, getCategories, getProducts } from 'core/services'
 import logo from 'assets/pics/logo.png'
-import { AppContext } from 'core/contexts'
+import { AppContext, Product } from 'core/contexts'
 
 export const NavbarComponent: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDialog, setOpenDialog] = useState(false)
   const [categories, setCategories] = useState<CategoriesResponse[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<CategoriesResponse[]>([]) // Nuevo estado
+  const [selectedCategories, setSelectedCategories] = useState<CategoriesResponse[]>([])
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const isDashboard = pathname.includes('dashboard')
-  const { products } = useContext(AppContext)
+  const { shoppingCar, setProducts } = useContext(AppContext)
   const classes = useStyles(isDashboard)
+  const [originalProducts, setOriginalProducts] = useState<Product[]>([])
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -75,6 +77,17 @@ export const NavbarComponent: React.FC = () => {
     handleCloseMenu()
   }
 
+  const updateProducts = () => {
+    if (selectedCategories.length === 0) {
+      setProducts(originalProducts)
+    } else {
+      const filteredProducts = originalProducts.filter((product) =>
+        selectedCategories.some((category) => category.id === product.category?.id)
+      )
+      setProducts(filteredProducts)
+    }
+  }
+
   const handleDeleteCategory = (categoryId: number) => {
     setSelectedCategories((prev) => prev.filter((category) => category.id !== categoryId))
   }
@@ -82,6 +95,21 @@ export const NavbarComponent: React.FC = () => {
   useEffect(() => {
     handleCategories()
   }, [])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data: productsData } = await getProducts()
+      if (productsData) {
+        setOriginalProducts(productsData)
+        setProducts(productsData)
+      }
+    }
+    fetchProducts()
+  }, [setProducts])
+
+  useEffect(() => {
+    updateProducts()
+  }, [selectedCategories]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -147,7 +175,7 @@ export const NavbarComponent: React.FC = () => {
                 navigate('/shopping-car')
               }}
             >
-              <Badge badgeContent={products.length} color="error">
+              <Badge badgeContent={shoppingCar.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

@@ -6,22 +6,22 @@ import { ArrowBack } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
 export const ShoppingCarComponent = () => {
-  const { products, setProducts } = useContext(AppContext)
+  const { shoppingCar, setShoppingCar } = useContext(AppContext)
   const navigate = useNavigate()
 
   const onUpdateQuantity = (id: number, quantity: number) => {
-    const newProducts = products.map((product) => {
+    const newProducts = shoppingCar.map((product) => {
       if (product.id === id) {
         return { ...product, amount: quantity }
       }
       return product
     })
-    setProducts(newProducts)
+    setShoppingCar(newProducts)
   }
 
   const onRemove = (id: number) => {
-    const newProducts = products.filter((product) => product.id !== id)
-    setProducts(newProducts)
+    const newProducts = shoppingCar.filter((product) => product.id !== id)
+    setShoppingCar(newProducts)
   }
 
   return (
@@ -53,13 +53,13 @@ export const ShoppingCarComponent = () => {
         />
         Mi Carrito
       </Typography>
-      {products.length === 0 ? (
+      {shoppingCar.length === 0 ? (
         <Typography variant="body1" sx={{ color: '#777' }}>
           No hay productos en el carrito.
         </Typography>
       ) : (
         <Grid container spacing={2}>
-          {products.map((product) => (
+          {shoppingCar.map((product) => (
             <Grid item xs={12} md={6} key={product.id}>
               <Paper
                 sx={{
@@ -71,7 +71,7 @@ export const ShoppingCarComponent = () => {
                 }}
               >
                 <img
-                  src={product.photoProduct?.[0] ?? ''}
+                  src={product.photoProduct ?? ''}
                   alt={product.nameProduct}
                   style={{
                     width: '80px',

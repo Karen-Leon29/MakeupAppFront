@@ -29,18 +29,24 @@ export const BodyComponent = ({
   const classes = useStyles
   const navigate = useNavigate()
   const [openFilter, setOpenFilter] = useState<boolean>(false)
-  const { setProducts } = useContext(AppContext) as {
-    setProducts: React.Dispatch<React.SetStateAction<Product[]>>
-  }
+  const { products, setShoppingCar } = useContext(AppContext) as { products: Product[], setShoppingCar: React.Dispatch<React.SetStateAction<Product[]>> }
   const [productsList, setProductsList] = useState<ProductsResponse[]>([])
 
   useEffect(() => {
     const handleProducts = async () => {
       const resp = await getProducts()
-      if (resp.data) setProductsList(resp.data)
+      if (resp.data) {
+        setProductsList(resp.data)
+      }
     }
     handleProducts()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (products) {
+      setProductsList(products)
+    }
+  }, [products])
 
   const toggleFilter = () => {
     setOpenFilter((prev) => !prev)
@@ -68,7 +74,7 @@ export const BodyComponent = ({
           <Card key={product.id} sx={classes.card}>
             <Box sx={classes.imageContainer}>
               <img
-                src={typeof product.photoProduct[0] === 'string' ? product.photoProduct[0] : ''}
+                src={typeof product.photoProduct === 'string' ? product.photoProduct : ''}
                 alt={product.nameProduct}
                 style={{
                   width: '100%',
@@ -91,27 +97,20 @@ export const BodyComponent = ({
               <Button
                 sx={classes.cardButton}
                 onClick={() => {
-                  setProducts((prev: Product[]) => {
-                    const existingProduct = prev.find((p) => p.id === product.id)
-                    if (existingProduct) {
-                      return prev.map((p) =>
-                        p.id === product.id ? { ...p, amount: (p.amount ?? 0) + 1 } : p
-                      )
-                    }
-                    return [
-                      ...prev,
-                      { 
-                        ...product, 
-                        amount: 1, 
-                        photoProduct: [typeof product.photoProduct[0] === 'string' ? product.photoProduct[0] : ''], 
-                        price: 29.99 
-                      },
-                    ]
-                  })
+                    setShoppingCar((prev: Product[]) => {
+                        const existingProduct = prev.find((p) => p.id === product.id)
+                        if (existingProduct) {
+                            return prev.map((p) =>
+                                p.id === product.id ? { ...p, amount: p.amount + 1 } : p
+                            )
+                        }
+                        return [...prev, { ...product, amount: 1 }]
+                    })
                 }}
               >
                 {translations.addToCart}
               </Button>
+
               <IconButton
                 sx={classes.arrowButton}
                 onClick={() => navigate('/product-detail/' + product.id)}
