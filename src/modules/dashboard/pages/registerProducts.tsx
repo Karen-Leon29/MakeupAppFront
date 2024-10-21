@@ -17,7 +17,7 @@ import { DashboardLayout } from 'modules/dashboard/layouts'
 import Spinner from 'core/components/spinner'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getProduct, postProduct, putProduct } from 'core/services'
+import { getCategories, getProduct, postProduct, putProduct } from 'core/services'
 
 interface ProductsRequest {
   nameProduct: string
@@ -25,25 +25,77 @@ interface ProductsRequest {
   price: number
   amount: number
   codeProduct: string
-  photoProduct: string[]
+  images: Images[]
   category: Category
+  photoProduct?: string
 }
 
 interface Category {
   id: number
+  nameCategory?: string
+  descriptionCategory?: string
+}
+
+interface Images {
+  id: number
+  imageUrl: string
 }
 
 export const RegisterProducts: React.FC = () => {
   const { register, handleSubmit, setValue, watch } = useForm<ProductsRequest>()
   const [loading, setLoading] = useState(true)
   const { id } = useParams<{ id: string }>()
+  const [categaries, setCategaries] = useState<Category[]>([])
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchCategaries = async () => {
+      const resp = await getCategories()
+      if (resp.data) setCategaries(resp.data)
+    }
+    fetchCategaries()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmit = async (data: ProductsRequest) => {
     if (id) {
-      await putProduct(Number(id), data)
+      await putProduct(Number(id), {
+        ...data,
+        images: data.images.map((image) => ({
+          imageUrl: image.imageUrl,
+          id: image.id,
+        })),
+      })
     } else {
-      await postProduct(data)
+      await postProduct({
+        nameProduct: 'Serum Roche Posay',
+        description:
+          'Descubre el nuevo sérum dermatológico despigmentante intensivo de La Roche Posay',
+        price: 10.0,
+        amount: 45,
+        codeProduct: 'PES001',
+        photoProduct: 'https://makeupapp-dev.s3.amazonaws.com/products/SerumMan.jpg',
+        category: {
+          id: 7,
+        },
+        images: [
+          {
+            id: 12,
+            imageUrl: 'https://makeupapp-dev.s3.amazonaws.com/products/collarSobre.jpeg',
+          },
+          {
+            id: 13,
+            imageUrl: 'https://makeupapp-dev.s3.amazonaws.com/products/collarSobre3.jpg',
+          },
+          {
+            id: 14,
+            imageUrl: 'https://makeupapp-dev.s3.amazonaws.com/products/collarSobre4.jpg',
+          },
+          {
+            id: 15,
+            imageUrl: 'https://makeupapp-dev.s3.amazonaws.com/products/collarSobre2.jpg',
+          },
+        ],
+      })
     }
     navigate('/dashboard/products')
   }
@@ -51,8 +103,11 @@ export const RegisterProducts: React.FC = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (files) {
-      const photoProduct = Array.from(files).map((file) => URL.createObjectURL(file))
-      setValue('photoProduct', photoProduct)
+      const images = Array.from(files).map((file) => URL.createObjectURL(file))
+      setValue(
+        'images',
+        images.map((imageUrl, index) => ({ id: index, imageUrl }))
+      )
     }
   }
 
@@ -65,8 +120,12 @@ export const RegisterProducts: React.FC = () => {
         setValue('price', data.data.price)
         setValue('amount', data.data.amount)
         setValue('codeProduct', data.data.codeProduct)
+        setValue(
+          'images',
+          data.data.images.map((image) => ({ id: image.id, imageUrl: image.imageUrl }))
+        )
         setValue('photoProduct', data.data.photoProduct)
-        setValue('category.id', data.data.category.id)
+        setValue('category', data.data.category)
       }
     } else {
       setValue('nameProduct', '')
@@ -74,8 +133,8 @@ export const RegisterProducts: React.FC = () => {
       setValue('price', 0)
       setValue('amount', 0)
       setValue('codeProduct', '')
-      setValue('photoProduct', [])
-      setValue('category.id', 0)
+      setValue('images', [])
+      setValue('category', { id: 0 })
     }
     setLoading(false)
   }
@@ -161,13 +220,22 @@ export const RegisterProducts: React.FC = () => {
               <FormControl fullWidth margin="normal">
                 <InputLabel id="category-label">Categoría</InputLabel>
                 <Select
-                  {...register('category.id', { required: true })}
                   labelId="category-label"
                   label="Categoría"
+                  value={watch('category')?.id || 0}
+                  onChange={(e) =>
+                    setValue(
+                      'category',
+                      categaries.find((cat) => cat.id === e.target.value) || { id: 0 }
+                    )
+                  }
                 >
-                  <MenuItem value={1}>Categoría 1</MenuItem>
-                  <MenuItem value={2}>Categoría 2</MenuItem>
-                  <MenuItem value={3}>Categoría 3</MenuItem>
+                  <MenuItem value={0}>Seleccione una categoría</MenuItem>
+                  {categaries.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                      {category.nameCategory}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -187,15 +255,15 @@ export const RegisterProducts: React.FC = () => {
           </Box>
 
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            {Array.isArray(watch('photoProduct')) &&
-              watch('photoProduct').map((photo, index) => (
+            {Array.isArray(watch('images')) &&
+              watch('images').map((photo, index) => (
                 <Grid item key={index} xs={1}>
                   <Paper elevation={2} sx={{ position: 'relative', padding: 1, borderRadius: 1 }}>
                     <IconButton
                       onClick={() => {
-                        const currentPhotos = watch('photoProduct')
+                        const currentPhotos = watch('images')
                         const newPhotos = currentPhotos.filter((_, i) => i !== index)
-                        setValue('photoProduct', newPhotos)
+                        setValue('images', newPhotos)
                       }}
                       sx={{
                         position: 'absolute',
@@ -207,7 +275,7 @@ export const RegisterProducts: React.FC = () => {
                       <Close />
                     </IconButton>
                     <img
-                      src={photo}
+                      src={photo.imageUrl}
                       alt={`Imagen ${index + 1}`}
                       style={{
                         maxHeight: '80px',

@@ -126,7 +126,7 @@ export const ProductsManagement = () => {
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      backgroundImage: `url(${product.photoProduct[0] || ''})`,
+                      backgroundImage: `url(${product.photoProduct || ''})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       opacity: 0.3,
@@ -218,7 +218,15 @@ export const ProductsManagement = () => {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              <Typography variant="h5" sx={{ mb: 3, textAlign: 'center' }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 3,
+                  textAlign: 'center',
+                  fontWeight: 700,
+                  color: theme.palette.primary.dark,
+                }}
+              >
                 {selectedProduct?.nameProduct}
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, maxHeight: '90%', height: '90%' }}>
@@ -231,12 +239,12 @@ export const ProductsManagement = () => {
                     scrollbarWidth: 'none',
                   }}
                 >
-                  {Array.isArray(selectedProduct?.photoProduct) &&
-                    selectedProduct?.photoProduct?.map((photo, index) => (
+                  {Array.isArray(selectedProduct?.images) &&
+                    selectedProduct?.images?.map((photo, index) => (
                       <Box
                         key={index}
                         component="img"
-                        src={photo}
+                        src={photo.imageUrl}
                         alt={`Foto ${index + 1}`}
                         sx={{
                           width: '100px',
@@ -248,12 +256,12 @@ export const ProductsManagement = () => {
                         }}
                         onClick={() => {
                           if (selectedProduct) {
-                            const updatedPhotos = [...(selectedProduct.photoProduct ?? [])]
+                            const updatedPhotos = [...(selectedProduct.images ?? [])]
                             ;[updatedPhotos[0], updatedPhotos[index]] = [
                               updatedPhotos[index],
                               updatedPhotos[0],
                             ]
-                            setSelectedProduct({ ...selectedProduct, photoProduct: updatedPhotos })
+                            setSelectedProduct({ ...selectedProduct, images: updatedPhotos })
                           }
                         }}
                       />
@@ -261,7 +269,7 @@ export const ProductsManagement = () => {
                 </Box>
                 <Box
                   component="img"
-                  src={selectedProduct?.photoProduct[0] || ''}
+                  src={selectedProduct?.photoProduct || ''}
                   alt={selectedProduct?.nameProduct}
                   sx={{
                     borderRadius: 2,
@@ -287,7 +295,8 @@ export const ProductsManagement = () => {
             </DialogTitle>
             <DialogContent>
               <Typography>
-                ¿Estás seguro de que deseas eliminar el producto {selectedProduct?.nameProduct}?
+                ¿Estás seguro de que deseas eliminar el producto{' '}
+                <b>{selectedProduct?.nameProduct}</b>?
               </Typography>
             </DialogContent>
             <DialogActions sx={{ my: 1 }}>

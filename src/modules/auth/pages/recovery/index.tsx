@@ -12,12 +12,11 @@ import { useNavigate } from 'react-router-dom'
 export const RecoveryPassword: React.FC = () => {
   const translations = useLittera(MakeupString)
   const navigate = useNavigate()
-  const transition = false
   const codeRecovery: string[] = ['', '', '', '', '', '']
   const [isCodeRecovery, setIsCodeRecovery] = useState<boolean>(false)
 
   return (
-    <LayoutLogin positionImg="right" transition={transition}>
+    <LayoutLogin positionImg="right">
       <Box>
         <TitleHeader
           title={translations.recoveryPassword}

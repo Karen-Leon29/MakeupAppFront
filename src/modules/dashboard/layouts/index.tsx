@@ -11,7 +11,7 @@ import {
   ListItemIcon,
 } from '@mui/material'
 import { NavbarComponent } from 'modules/homeoage/components/navbar'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const drawerWidth = 240
 
@@ -21,6 +21,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -59,14 +60,16 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 '&.Mui-selected': {
                   backgroundColor: (theme) => theme.palette.primary.light,
                   color: (theme) => theme.palette.primary.contrastText,
-                  '&:hover': {
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                  },
                 },
+                bgcolor: pathname === '/dashboard/users' ? 'secondary.light' : 'background.paper',
               }}
             >
               <ListItemIcon>
-                <PeopleOutline sx={{ color: 'primary.main' }} />
+                <PeopleOutline
+                  sx={{
+                    color: pathname === '/dashboard/users' ? 'primary.dark' : 'primary.main',
+                  }}
+                />
               </ListItemIcon>
               <ListItemText primary="Usuarios" />
             </ListItemButton>
@@ -80,14 +83,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 '&.Mui-selected': {
                   backgroundColor: (theme) => theme.palette.primary.light,
                   color: (theme) => theme.palette.primary.contrastText,
-                  '&:hover': {
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                  },
                 },
+                bgcolor:
+                  pathname === '/dashboard/categories' ? 'secondary.light' : 'background.paper',
               }}
             >
               <ListItemIcon>
-                <CategoryOutlined sx={{ color: 'primary.main' }} />
+                <CategoryOutlined
+                  sx={{
+                    color: pathname === '/dashboard/categories' ? 'primary.dark' : 'primary.main',
+                  }}
+                />
               </ListItemIcon>
               <ListItemText primary="Categorías" />
             </ListItemButton>
@@ -101,14 +107,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 '&.Mui-selected': {
                   backgroundColor: (theme) => theme.palette.primary.light,
                   color: (theme) => theme.palette.primary.contrastText,
-                  '&:hover': {
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                  },
                 },
+                bgcolor:
+                  pathname === '/dashboard/products' ? 'secondary.light' : 'background.paper',
               }}
             >
               <ListItemIcon>
-                <StorefrontOutlined sx={{ color: 'primary.main' }} />
+                <StorefrontOutlined
+                  sx={{
+                    color: pathname === '/dashboard/products' ? 'primary.dark' : 'primary.main',
+                  }}
+                />
               </ListItemIcon>
               <ListItemText primary="Productos" />
             </ListItemButton>

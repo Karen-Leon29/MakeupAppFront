@@ -18,12 +18,17 @@ export interface ProductsRequest {
     price: number;
     amount: number;
     codeProduct: string;
-    photoProduct: string[];
+    images: Images[];
     category: Category;
+    presentation?: string;
+    brand?: string;
+    photoProduct?: string;
 }
 
 export interface Category {
     id: number;
+    nameCategory?: string;
+    descriptionCategory?: string;
 }
 
 export interface ProductsResponse {
@@ -33,10 +38,16 @@ export interface ProductsResponse {
     price: number;
     amount: number;
     codeProduct: string;
-    photoProduct: string[] ;
+    images: Images[];
     category: Category;
     presentation?: string;
     brand?: string;
+    photoProduct?: string;
+}
+
+export interface Images {
+    id: number;
+    imageUrl: string;
 }
 
 export const getCategories = async () => {

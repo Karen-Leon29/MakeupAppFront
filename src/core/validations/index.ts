@@ -20,14 +20,6 @@ export const useValidations = () => {
         confirmPassword: (password: string) => z
             .string()
             .min(1, { message: translations.confirmPasswordRequired })
-            .superRefine((value: string, ctx) => {
-                if (value !== password) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: translations.passwordsDoNotMatch,
-                    });
-                }
-            })
         ,
         username: z
             .string()

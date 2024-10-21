@@ -38,7 +38,7 @@ export const ProductDetailPage = () => {
     if (!product) return
     newProducts.push({
       ...product,
-      photoProduct: product.photoProduct.map(photo => typeof photo === 'string' ? photo : '')
+      images: product.photoProduct ? [{ id: 0, imageUrl: product.photoProduct }] : [],
     })
     setProducts(newProducts)
   }
@@ -69,13 +69,13 @@ export const ProductDetailPage = () => {
         <Grid item xs={12} md={6}>
           <Box sx={classes.imageContainer}>
             <Box sx={classes.thumbnailContainer}>
-              {Array.isArray(product?.photoProduct) &&
-                product.photoProduct.map((img, index) => (
+              {Array.isArray(product?.images) &&
+                product.images.map((img, index) => (
                   <img
                     key={index}
-                    src={typeof img === 'string' ? img : ''}
+                    src={typeof img.imageUrl === 'string' ? img.imageUrl : ''}
                     alt={`Producto miniatura ${index}`}
-                    onClick={() => handleImageClick(typeof img === 'string' ? img : '')}
+                    onClick={() => handleImageClick(typeof img.imageUrl === 'string' ? img.imageUrl : '')}
                     style={{
                       width: '80px',
                       height: '80px',
@@ -84,21 +84,23 @@ export const ProductDetailPage = () => {
                       transition: 'border 0.3s ease, transform 0.3s',
                       borderRadius: '8px',
                       border:
-                        selectedImage === img ? `2px solid ${theme.palette.primary.main}` : '',
-                      transform: selectedImage === img ? 'scale(1.05)' : 'scale(1)',
+                        selectedImage === img.imageUrl ? `2px solid ${theme.palette.primary.main}` : '',
+                      transform: selectedImage === img.imageUrl ? 'scale(1.05)' : 'scale(1)',
                     }}
                   />
                 ))}
             </Box>
             <Box sx={classes.mainImageContainer}>
               <img
-                src={selectedImage || (typeof product?.photoProduct[0] === 'string' ? product.photoProduct[0] : '') || ''}
+                src={selectedImage || (typeof product?.images[0]?.imageUrl === 'string' ? product.images[0]?.imageUrl : '') || ''}
                 alt="Imagen Principal"
                 style={{
                   width: 'auto',
-                  height: '100%',
+                  maxWidth: '600px',
+                  height: 'auto',
                   minHeight: '400px',
                   borderRadius: '10px',
+                  objectFit: 'cover',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   transition: 'transform 0.3s ease',
                 }}
