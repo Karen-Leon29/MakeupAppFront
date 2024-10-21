@@ -15,9 +15,9 @@ export const useValidations = () => {
             .min(8, { message: translations.passwordMinLength })
             .max(128, { message: translations.passwordMaxLength })
             .refine(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(value), {
-                message: translations.passwordInvalid
+                message: translations.passwordInvalid,
             }),
-        confirmPassword: (password: string) => z
+        confirmPassword: z
             .string()
             .min(1, { message: translations.confirmPasswordRequired })
         ,
